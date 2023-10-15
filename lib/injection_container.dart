@@ -3,6 +3,10 @@ import 'package:campus_insider/features/daily_news/data/data_sources/remote/news
 import 'package:campus_insider/features/daily_news/data/repository/article_repository_impl.dart';
 import 'package:campus_insider/features/daily_news/domain/repository/article_repository.dart';
 import 'package:campus_insider/features/daily_news/domain/use_cases/get_article.dart';
+import 'package:campus_insider/features/daily_news/domain/use_cases/get_saved_article.dart';
+import 'package:campus_insider/features/daily_news/domain/use_cases/remove_article.dart';
+import 'package:campus_insider/features/daily_news/domain/use_cases/save_article.dart';
+import 'package:campus_insider/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:campus_insider/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -21,12 +25,30 @@ Future<void> initializeDependencies() async {
 
 
   sl.registerSingleton<ArticleRepository>(
-    ArticleRepositoryImpl(sl())
+    ArticleRepositoryImpl(sl(), sl())
   );
 
   // UseCases
-  sl.registerSingleton<GetArticleUseCase>(GetArticleUseCase(sl()));
+  sl.registerSingleton<GetArticleUseCase>(
+      GetArticleUseCase(sl())
+  );
+
+  sl.registerSingleton<GetSavedArticleUseCase>(
+      GetSavedArticleUseCase(sl())
+  );
+
+  sl.registerSingleton<SaveArticleUseCase>(
+      SaveArticleUseCase(sl())
+  );
+
+  sl.registerSingleton<RemoveArticleUseCase>(
+      RemoveArticleUseCase(sl())
+  );
+
+
 
   // Blocs
   sl.registerFactory<RemoteArticlesBloc>(() => RemoteArticlesBloc(sl()));
+
+  sl.registerFactory<LocalArticleBloc>(() => LocalArticleBloc(sl(), sl(), sl()));
 }

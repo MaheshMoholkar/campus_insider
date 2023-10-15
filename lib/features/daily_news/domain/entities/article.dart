@@ -19,6 +19,7 @@ class ArticleEntity extends Equatable {
     this.urlToImage,
     this.publishedAt,
     this.content,
+
   });
 
   @override
