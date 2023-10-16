@@ -1,3 +1,4 @@
+import 'package:campus_insider/core/constants/constants.dart';
 import 'package:campus_insider/features/daily_news/data/data_sources/local/app_database.dart';
 import 'package:campus_insider/features/daily_news/data/data_sources/remote/news_api_service.dart';
 import 'package:campus_insider/features/daily_news/data/repository/article_repository_impl.dart';
@@ -46,9 +47,7 @@ Future<void> initializeDependencies() async {
   );
 
 
-
   // Blocs
-  sl.registerFactory<RemoteArticlesBloc>(() => RemoteArticlesBloc(sl()));
-
+  sl.registerFactory<RemoteArticlesBloc>(() => RemoteArticlesBloc(sl<GetArticleUseCase>(), 'general'));
   sl.registerFactory<LocalArticleBloc>(() => LocalArticleBloc(sl(), sl(), sl()));
 }

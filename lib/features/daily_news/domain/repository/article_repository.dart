@@ -3,7 +3,7 @@ import 'package:campus_insider/features/daily_news/domain/entities/article.dart'
 
 abstract class ArticleRepository {
   // API methods
-  Future<DataState<List<ArticleEntity>>> getNewsArticles();
+  Future<DataState<List<ArticleEntity>>> getNewsArticles(String category);
 
   // Database methods
   Future<List<ArticleEntity>> getSavedArticles();

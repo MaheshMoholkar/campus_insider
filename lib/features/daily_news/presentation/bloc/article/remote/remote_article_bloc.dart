@@ -7,15 +7,16 @@ import 'package:campus_insider/features/daily_news/presentation/bloc/article/rem
 class RemoteArticlesBloc extends Bloc<RemoteArticlesEvent, RemoteArticlesState> {
 
   final GetArticleUseCase _getArticleUseCase;
+  final String categoryName;
 
-  RemoteArticlesBloc(this._getArticleUseCase)
+  RemoteArticlesBloc(this._getArticleUseCase, this.categoryName)
       : super(const RemoteArticleLoading()) {
     on <GetArticles>(onGetArticles);
   }
 
   void onGetArticles(GetArticles event,
       Emitter<RemoteArticlesState> emit) async {
-    final dataState = await _getArticleUseCase();
+    final dataState = await _getArticleUseCase(params: categoryName);
 
     if (dataState is DataSuccess && dataState.data!.isNotEmpty) {
       emit(

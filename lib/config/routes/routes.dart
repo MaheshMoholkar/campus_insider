@@ -18,7 +18,7 @@ class AppRoutes {
         return _materialRoute(ArticleDetailsView(article: settings.arguments as ArticleEntity));
 
       case '/SavedArticles':
-        return _materialRoute(SavedArticles());
+        return _materialRoute(const SavedArticles());
 
       default:
         return _materialRoute(Dashboard());

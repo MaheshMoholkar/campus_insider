@@ -1,8 +1,10 @@
 import 'package:campus_insider/features/daily_news/domain/entities/article.dart';
 import 'package:campus_insider/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
+import 'package:campus_insider/features/daily_news/presentation/bloc/article/remote/remote_article_event.dart';
 import 'package:campus_insider/features/daily_news/presentation/bloc/article/remote/remote_article_state.dart';
 import 'package:campus_insider/features/daily_news/presentation/widgets/article_tile.dart';
 import 'package:campus_insider/features/dashboard/presentation/widgets/app_bar.dart';
+import 'package:campus_insider/injection_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,9 +16,14 @@ class DailyNews extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildAppBar(context),
-      body: _buildBody(),
+    print(categoryName + 'in dialynews');
+    return BlocProvider<RemoteArticlesBloc>(
+      key: ValueKey(categoryName),
+      create: (context) => sl<RemoteArticlesBloc>()..add(GetArticles(categoryName)),
+      child: Scaffold(
+        appBar: buildAppBar(context),
+        body: _buildBody(),
+      ),
     );
   }
 
@@ -30,18 +37,13 @@ class DailyNews extends StatelessWidget {
           return const Center(child: Icon(Icons.refresh));
         }
         if (state is RemoteArticleDone) {
-          // final filteredArticles = state.articles!
-          //     .where((article) => article.category == categoryName)
-          //     .toList();
           return ListView.builder(
             itemBuilder: (context, index) {
               return ArticleWidget(
-                // article: filteredArticles[index],
                 article: state.articles![index],
                 onArticlePressed: (article) => _onArticlePressed(context, article),
               );
             },
-            // itemCount: filteredArticles.length,
             itemCount: state.articles!.length,
           );
         }

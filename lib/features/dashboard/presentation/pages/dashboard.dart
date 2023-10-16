@@ -1,26 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:campus_insider/features/dashboard/presentation/widgets/app_bar.dart';
-import 'package:campus_insider/features/daily_news/domain/entities/article.dart';
-import 'package:campus_insider/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
-import 'package:campus_insider/features/daily_news/presentation/bloc/article/remote/remote_article_state.dart';
-import 'package:campus_insider/features/daily_news/presentation/widgets/article_tile.dart';
 import 'package:campus_insider/features/dashboard/data/models/category_model.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class Dashboard extends StatelessWidget {
   Dashboard({super.key});
 
-  List<CategoryModel> categories = [];
-
-  void _getCategories() {
-    categories = CategoryModel.getCategories();
-  }
+  final List<CategoryModel> categories = CategoryModel.getCategories();
 
   @override
   Widget build(BuildContext context) {
-    _getCategories();
     return Scaffold(
       appBar: buildAppBar(context),
       backgroundColor: Colors.white,
