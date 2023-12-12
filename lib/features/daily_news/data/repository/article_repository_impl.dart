@@ -14,10 +14,36 @@ class ArticleRepositoryImpl implements ArticleRepository{
   ArticleRepositoryImpl(this._newsApiService, this._appDatabase);
 
   @override
-  Future<DataState<List<ArticleModel>>> getNewsArticles(String category) async {
+  Future<DataState<List<ArticleModel>>> getNewsArticlesByCategories(String category) async {
     try {
-      final httpResponse = await _newsApiService.getNewsArticle(
-        category:categoryQuery,
+      final httpResponse = await _newsApiService.getNewsArticleByCategory(
+        countryQuery: countryQuery,
+        category:category,
+        apiKey:newsAPIKey,
+      );
+
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
+        return DataSuccess(httpResponse.data);
+      } else {
+        return DataFailed(
+            DioException(
+                error: httpResponse.response.statusMessage,
+                response: httpResponse.response,
+                type: DioExceptionType.badResponse,
+                requestOptions: httpResponse.response.requestOptions
+            )
+        );
+      }
+    } on DioException catch(e){
+      return DataFailed(e);
+    }
+  }
+
+  @override
+  Future<DataState<List<ArticleModel>>> getNewsArticlesBySources(String source) async {
+    try {
+      final httpResponse = await _newsApiService.getNewsArticleBySource(
+        source:source,
         apiKey:newsAPIKey,
       );
 
@@ -51,5 +77,30 @@ class ArticleRepositoryImpl implements ArticleRepository{
   @override
   Future<List<ArticleModel>> getSavedArticles() {
     return _appDatabase.articleDAO.getArticles();
+  }
+
+  @override
+  Future<DataState<List<ArticleEntity>>> getNewsArticlesBySearch(String search) async {
+    try {
+      final httpResponse = await _newsApiService.getNewsArticleBySearch(
+        search:search,
+        apiKey:newsAPIKey,
+      );
+
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
+        return DataSuccess(httpResponse.data);
+      } else {
+        return DataFailed(
+            DioException(
+                error: httpResponse.response.statusMessage,
+                response: httpResponse.response,
+                type: DioExceptionType.badResponse,
+                requestOptions: httpResponse.response.requestOptions
+            )
+        );
+      }
+    } on DioException catch(e){
+      return DataFailed(e);
+    }
   }
 }

@@ -21,12 +21,14 @@ class _NewsApiService implements NewsApiService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<List<ArticleModel>>> getNewsArticle({
+  Future<HttpResponse<List<ArticleModel>>> getNewsArticleByCategory({
+    String? countryQuery,
     String? category,
     String? apiKey,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
+      r'country': countryQuery,
       r'category': category,
       r'apiKey': apiKey,
     };
@@ -42,6 +44,80 @@ class _NewsApiService implements NewsApiService {
             .compose(
               _dio.options,
               '/top-headlines',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    List<ArticleModel> value = _result.data!['articles']
+        .map<ArticleModel>((dynamic i) => ArticleModel.fromJson(i as Map<String, dynamic>))
+        .toList();
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<List<ArticleModel>>> getNewsArticleBySource({
+    String? source,
+    String? apiKey,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'sources': source,
+      r'apiKey': apiKey,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<HttpResponse<List<ArticleModel>>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/top-headlines',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    List<ArticleModel> value = _result.data!['articles']
+        .map<ArticleModel>((dynamic i) => ArticleModel.fromJson(i as Map<String, dynamic>))
+        .toList();
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<List<ArticleModel>>> getNewsArticleBySearch({
+    String? search,
+    String? apiKey,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'q': search,
+      r'apiKey': apiKey,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<HttpResponse<List<ArticleModel>>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/everything',
               queryParameters: queryParameters,
               data: _data,
             )

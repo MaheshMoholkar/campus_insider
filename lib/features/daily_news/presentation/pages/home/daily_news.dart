@@ -1,3 +1,4 @@
+import 'package:campus_insider/core/constants/constants.dart';
 import 'package:campus_insider/features/daily_news/domain/entities/article.dart';
 import 'package:campus_insider/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 import 'package:campus_insider/features/daily_news/presentation/bloc/article/remote/remote_article_event.dart';
@@ -10,16 +11,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DailyNews extends StatelessWidget {
-  final String categoryName;
+  final String queryValue;
+  final ArticleQueryType queryType;
 
-  const DailyNews({Key? key, required this.categoryName}) : super(key: key);
+
+  const DailyNews({Key? key, required this.queryValue, required this.queryType}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(categoryName + 'in dialynews');
     return BlocProvider<RemoteArticlesBloc>(
-      key: ValueKey(categoryName),
-      create: (context) => sl<RemoteArticlesBloc>()..add(GetArticles(categoryName)),
+      key: ValueKey(queryValue),
+      create: (context) => sl<RemoteArticlesBloc>()..add(GetArticles(queryValue, queryType)),
       child: Scaffold(
         appBar: buildAppBar(context),
         body: _buildBody(),
@@ -53,6 +55,6 @@ class DailyNews extends StatelessWidget {
   }
 
   void _onArticlePressed(BuildContext context, ArticleEntity article) {
-    Navigator.pushNamed(context, '/ArticleDetails', arguments: article);
+    Navigator.pushNamed(context, 'ArticleDetails', arguments: article);
   }
 }

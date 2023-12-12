@@ -7,25 +7,29 @@ import 'package:campus_insider/features/daily_news/presentation/bloc/article/rem
 class RemoteArticlesBloc extends Bloc<RemoteArticlesEvent, RemoteArticlesState> {
 
   final GetArticleUseCase _getArticleUseCase;
-  final String categoryName;
 
-  RemoteArticlesBloc(this._getArticleUseCase, this.categoryName)
+  RemoteArticlesBloc(this._getArticleUseCase)
       : super(const RemoteArticleLoading()) {
-    on <GetArticles>(onGetArticles);
+    on<GetArticles>(onGetArticles);
   }
 
-  void onGetArticles(GetArticles event,
-      Emitter<RemoteArticlesState> emit) async {
-    final dataState = await _getArticleUseCase(params: categoryName);
+  void onGetArticles(GetArticles event, Emitter<RemoteArticlesState> emit) async {
+    final queryType = event.queryType;
+    final queryValue = event.queryValue;
+
+    final dataState = await _getArticleUseCase.call(params: {
+      'queryType': queryType,
+      'queryValue': queryValue,
+    });
 
     if (dataState is DataSuccess && dataState.data!.isNotEmpty) {
       emit(
-          RemoteArticleDone(dataState.data!)
+        RemoteArticleDone(dataState.data!),
       );
     }
     if (dataState is DataFailed) {
       emit(
-          RemoteArticleException(dataState.error!)
+        RemoteArticleException(dataState.error!),
       );
     }
   }

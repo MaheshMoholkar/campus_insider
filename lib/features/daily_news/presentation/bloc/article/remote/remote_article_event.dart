@@ -1,6 +1,8 @@
+import 'package:campus_insider/core/constants/constants.dart';
 import 'package:equatable/equatable.dart';
+import 'package:campus_insider/features/daily_news/domain/use_cases/get_article.dart';
 
-abstract class RemoteArticlesEvent extends Equatable{
+abstract class RemoteArticlesEvent extends Equatable {
   const RemoteArticlesEvent();
 
   @override
@@ -8,10 +10,11 @@ abstract class RemoteArticlesEvent extends Equatable{
 }
 
 class GetArticles extends RemoteArticlesEvent {
-  final String categoryName;
+  final String queryValue;
+  final ArticleQueryType queryType;
 
-  const GetArticles(this.categoryName);
+  const GetArticles(this.queryValue, this.queryType);
 
   @override
-  List<Object?> get props => [categoryName];
+  List<Object?> get props => [queryValue, queryType];
 }

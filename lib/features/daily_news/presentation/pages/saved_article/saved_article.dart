@@ -7,59 +7,39 @@ import 'package:campus_insider/injection_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:ionicons/ionicons.dart';
 
-class SavedArticles extends HookWidget {
-  const SavedArticles({Key ? key}) : super(key: key);
+class SavedArticles extends StatelessWidget {
+  const SavedArticles({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => sl<LocalArticleBloc>()..add(const GetSavedArticles()),
-      child: Scaffold(
-        appBar: _buildAppBar(),
-        body: _buildBody(),
+      child: BlocBuilder<LocalArticleBloc, LocalArticlesState>(
+        builder: (context, state) {
+          if (state is LocalArticlesLoading) {
+            return const Center(child: CupertinoActivityIndicator());
+          } else if (state is LocalArticlesDone) {
+            return _buildArticlesList(state.articles!);
+          }
+          return Container();
+        },
       ),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      leading: Builder(
-        builder: (context) => GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () => _onBackButtonTapped(context),
-          child: const Icon(Ionicons.chevron_back, color: Colors.black),
-        ),
-      ),
-      title: const Text('Saved Articles', style: TextStyle(color: Colors.black)),
-    );
-  }
-
-  Widget _buildBody() {
-    return BlocBuilder<LocalArticleBloc, LocalArticlesState>(
-      builder: (context, state) {
-        if (state is LocalArticlesLoading) {
-          return const Center(child: CupertinoActivityIndicator());
-        } else if (state is LocalArticlesDone) {
-          return _buildArticlesList(state.articles!);
-        }
-        return Container();
-      },
     );
   }
 
   Widget _buildArticlesList(List<ArticleEntity> articles) {
     if (articles.isEmpty) {
       return const Center(
-          child: Text(
-            'NO SAVED ARTICLES',
-            style: TextStyle(color: Colors.black),
-          ));
+        child: Text(
+          'NO SAVED ARTICLES',
+          style: TextStyle(color: Colors.black),
+        ),
+      );
     }
 
     return ListView.builder(
+      shrinkWrap: true,
       itemCount: articles.length,
       itemBuilder: (context, index) {
         return ArticleWidget(
@@ -70,10 +50,6 @@ class SavedArticles extends HookWidget {
         );
       },
     );
-  }
-
-  void _onBackButtonTapped(BuildContext context) {
-    Navigator.pop(context);
   }
 
   void _onRemoveArticle(BuildContext context, ArticleEntity article) {

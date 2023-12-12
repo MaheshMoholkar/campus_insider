@@ -4,12 +4,10 @@ import 'package:ionicons/ionicons.dart';
 class CategoryModel {
   String name;
   IconData icon;
-  Color boxColor;
 
   CategoryModel({
     required this.name,
-    required this.icon,
-    required this.boxColor
+    required this.icon
   });
 
   static List<CategoryModel> getCategories() {
@@ -19,42 +17,36 @@ class CategoryModel {
       CategoryModel(
         name: 'Business',
         icon: Ionicons.bag,
-        boxColor: const Color(0XFF92A3FD)
       )
     );
     categories.add(
       CategoryModel(
-        name: 'Social',
-        icon: Ionicons.people_outline,
-        boxColor: const Color(0XFFC58BF2)
+        name: 'Entertainment',
+        icon: Ionicons.people
       )
     );
     categories.add(
       CategoryModel(
         name: 'Health',
-        icon: Ionicons.heart,
-          boxColor: const Color(0XFF92A3FD)
+        icon: Ionicons.heart
       )
     );
     categories.add(
       CategoryModel(
         name: 'Science',
-        icon: Ionicons.rocket_outline,
-          boxColor: const Color(0XFFC58BF2)
+        icon: Ionicons.rocket
       )
     );
     categories.add(
       CategoryModel(
         name: 'Sports',
-          icon: Ionicons.baseball_outline,
-          boxColor: const Color(0XFF92A3FD)
+          icon: Ionicons.baseball
       )
     );
     categories.add(
       CategoryModel(
         name: 'Technology',
-        icon: Ionicons.telescope_outline,
-          boxColor: const Color(0XFFC58BF2)
+        icon: Ionicons.telescope
       )
     );
 
